@@ -4,10 +4,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-
-@app.route("/")
-def homepage():
-    return "Welcome to Flask API!"
+task_list = []
 
 
 @app.route("/message", methods=["GET"])
