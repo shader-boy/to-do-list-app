@@ -11,6 +11,7 @@ function App() {
       <p>Hello React!</p>
       {/* <TaskList /> */}
       <TaskInput />
+      <ShowTasks />
     </div>
   );
 }
@@ -18,10 +19,32 @@ function App() {
 function TaskInput() {
   const [task, setTask] = useState("");
 
-  const handleSubmit = function (e) {
+  const handleChange = (e) => {
     setTask(e.target.value);
-    console.log(e.target.value);
-    console.log(task);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:5000/input-task", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ task }), // send the input task as json
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send task");
+      }
+
+      const result = await response.json();
+      console.log("Server response", result);
+
+      setTask("");
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
   };
 
   return (
@@ -31,33 +54,28 @@ function TaskInput() {
           type="text"
           name="task-input"
           placeholder="Enter a task?"
+          value={task}
+          onChange={handleChange}
           required
         ></input>
-        <button variant="contained">Submit</button>
+        <button type="submit">Submit</button>
       </form>
     </>
   );
 }
 
-function Task() {}
+function ShowTasks() {
+  const tasks = ["books", "cheese", "pencil", "pen"];
 
-function TaskList() {
-  const [taskList, setTaskList] = useState("");
-
-  useEffect(() => {
-    // Fetch data from Flask API
-    fetch("/message")
-      .then((response) => response.json())
-      .then((data) => {
-        setTaskList(data);
-        console.log(data);
-      });
-  }, []);
+  const task_list = await fetch()
 
   return (
     <>
-      <h1>React to Flask</h1>
-      {taskList ? <p>{taskList.message}</p> : <p>Loading...</p>}
+      <div>
+        {tasks.map((task) => {
+          return <li>{task}</li>;
+        })}
+      </div>
     </>
   );
 }
