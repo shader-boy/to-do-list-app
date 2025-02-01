@@ -23,6 +23,8 @@ function TaskInput() {
     setTask(e.target.value);
   };
 
+  console.log('hello')
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
