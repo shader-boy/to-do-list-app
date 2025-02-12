@@ -23,8 +23,6 @@ function TaskInput() {
     setTask(e.target.value);
   };
 
-  console.log('hello')
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -69,7 +67,22 @@ function TaskInput() {
 function ShowTasks() {
   const tasks = ["books", "cheese", "pencil", "pen"];
 
-  const task_list = await fetch()
+  const task_list = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/input-task", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ task }),
+      });
+
+      const result = response.json();
+      console.log("Server response: ", result);
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
 
   return (
     <>
